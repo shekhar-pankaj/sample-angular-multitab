@@ -51,4 +51,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
       true
     );
   }
+
+  createProduct(): void {
+    this.tabManager.openTab(
+      'Create Product',
+      '/products/create',
+      true
+    );
+  }
 }

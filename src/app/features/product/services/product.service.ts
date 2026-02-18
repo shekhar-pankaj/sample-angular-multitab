@@ -78,4 +78,10 @@ export class ProductService {
     );
     return of(filtered).pipe(delay(300));
   }
+
+  createProduct(product: Product): Observable<Product> {
+    // Simulate API call with delay
+    this.products.push(product);
+    return of(product).pipe(delay(500));
+  }
 }

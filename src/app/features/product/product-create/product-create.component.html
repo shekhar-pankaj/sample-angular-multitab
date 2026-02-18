@@ -1,0 +1,100 @@
+<div class="content">
+  <h1>Create New Product</h1>
+
+  <div class="form-container">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Product Name *</label>
+        <input 
+          type="text" 
+          id="name" 
+          formControlName="name"
+          class="form-control"
+          [class.is-invalid]="submitted && f['name'].errors"
+          placeholder="Enter product name">
+        <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+          <div *ngIf="f['name'].errors['required']">Product name is required</div>
+          <div *ngIf="f['name'].errors['minlength']">Name must be at least 3 characters</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description *</label>
+        <textarea 
+          id="description" 
+          formControlName="description"
+          class="form-control"
+          [class.is-invalid]="submitted && f['description'].errors"
+          rows="4"
+          placeholder="Describe the product"></textarea>
+        <div *ngIf="submitted && f['description'].errors" class="invalid-feedback">
+          <div *ngIf="f['description'].errors['required']">Description is required</div>
+          <div *ngIf="f['description'].errors['minlength']">Description must be at least 10 characters</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="price">Price (USD) *</label>
+          <input 
+            type="number" 
+            id="price" 
+            formControlName="price"
+            class="form-control"
+            [class.is-invalid]="submitted && f['price'].errors"
+            placeholder="0.00"
+            step="0.01"
+            min="0">
+          <div *ngIf="submitted && f['price'].errors" class="invalid-feedback">
+            <div *ngIf="f['price'].errors['required']">Price is required</div>
+            <div *ngIf="f['price'].errors['min']">Price must be greater than 0</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock Quantity *</label>
+          <input 
+            type="number" 
+            id="stock" 
+            formControlName="stock"
+            class="form-control"
+            [class.is-invalid]="submitted && f['stock'].errors"
+            placeholder="0"
+            min="0">
+          <div *ngIf="submitted && f['stock'].errors" class="invalid-feedback">
+            <div *ngIf="f['stock'].errors['required']">Stock is required</div>
+            <div *ngIf="f['stock'].errors['min']">Stock cannot be negative</div>
+            <div *ngIf="f['stock'].errors['pattern']">Stock must be a whole number</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category *</label>
+        <select 
+          id="category" 
+          formControlName="category"
+          class="form-control"
+          [class.is-invalid]="submitted && f['category'].errors">
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+        <div *ngIf="submitted && f['category'].errors" class="invalid-feedback">
+          <div *ngIf="f['category'].errors['required']">Category is required</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Create Product</button>
+        <button type="button" class="btn btn-secondary" (click)="onReset()">Reset Form</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+      </div>
+
+      <div class="form-info">
+        <p><small>* Required fields</small></p>
+        <p *ngIf="productForm.dirty" class="text-success">
+          <small>✓ Form state is automatically saved when switching tabs</small>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

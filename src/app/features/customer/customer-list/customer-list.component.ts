@@ -51,4 +51,12 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       true // Reuse tab if already open
     );
   }
+
+  createCustomer(): void {
+    this.tabManager.openTab(
+      'Create Customer',
+      '/customers/create',
+      true
+    );
+  }
 }

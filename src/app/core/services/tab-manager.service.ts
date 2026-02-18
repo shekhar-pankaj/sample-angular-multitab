@@ -12,16 +12,25 @@ export class TabManagerService {
   private readonly activeTabId = new BehaviorSubject<string | null>(null);
   private readonly maxTabs = 10; // Limit for memory management
   private readonly componentRefs = new Map<string, ComponentRef<any>>();
+  private readonly STORAGE_KEY = 'angular_multitab_state';
 
   public tabs$ = this.tabs.asObservable();
   public activeTabId$ = this.activeTabId.asObservable();
 
   constructor(private readonly router: Router) {
+    // Restore tabs from localStorage on initialization
+    this.restoreTabsFromStorage();
+
     // Listen to route changes to update tab titles dynamically
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.updateActiveTabFromRoute();
+    });
+
+    // Save tabs to localStorage whenever they change
+    this.tabs$.subscribe(() => {
+      this.saveTabsToStorage();
     });
   }
 
@@ -130,6 +139,9 @@ export class TabManagerService {
     this.tabs.next([]);
     this.activeTabId.next(null);
     this.router.navigate(['/']);
+    
+    // Clear stored state when all tabs are closed
+    this.clearStoredState();
   }
 
   /**
@@ -283,5 +295,97 @@ export class TabManagerService {
    */
   private generateTabId(): string {
     return `tab-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+  }
+
+  /**
+   * Saves current tabs to localStorage for browser tab duplication support
+   */
+  private saveTabsToStorage(): void {
+    try {
+      const currentTabs = this.tabs.value;
+      const serializedTabs = currentTabs.map(tab => ({
+        id: tab.id,
+        title: tab.title,
+        url: tab.url,
+        active: tab.active,
+        loaded: tab.loaded,
+        scrollPosition: tab.scrollPosition,
+        componentState: tab.componentState,
+        createdAt: tab.createdAt.toISOString(),
+        lastAccessedAt: tab.lastAccessedAt.toISOString()
+      }));
+
+      const state = {
+        tabs: serializedTabs,
+        activeTabId: this.activeTabId.value,
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.warn('Failed to save tabs to localStorage:', error);
+    }
+  }
+
+  /**
+   * Restores tabs from localStorage on app initialization
+   */
+  private restoreTabsFromStorage(): void {
+    try {
+      const storedState = localStorage.getItem(this.STORAGE_KEY);
+      if (!storedState) return;
+
+      const state = JSON.parse(storedState);
+      
+      // Check if state is recent (within last 24 hours)
+      const timestamp = new Date(state.timestamp);
+      const now = new Date();
+      const hoursDiff = (now.getTime() - timestamp.getTime()) / (1000 * 60 * 60);
+      
+      if (hoursDiff > 24) {
+        // Clear old state
+        localStorage.removeItem(this.STORAGE_KEY);
+        return;
+      }
+
+      // Restore tabs
+      const restoredTabs: TabState[] = state.tabs.map((tab: any) => ({
+        ...tab,
+        createdAt: new Date(tab.createdAt),
+        lastAccessedAt: new Date(tab.lastAccessedAt)
+      }));
+
+      if (restoredTabs.length > 0) {
+        this.tabs.next(restoredTabs);
+        
+        // Restore active tab
+        if (state.activeTabId) {
+          this.activeTabId.next(state.activeTabId);
+          
+          // Navigate to the active tab's URL
+          const activeTab = restoredTabs.find(t => t.id === state.activeTabId);
+          if (activeTab) {
+            // Use setTimeout to ensure router is ready
+            setTimeout(() => {
+              this.router.navigateByUrl(activeTab.url);
+            }, 0);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to restore tabs from localStorage:', error);
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
+  }
+
+  /**
+   * Clears stored tab state from localStorage
+   */
+  public clearStoredState(): void {
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.warn('Failed to clear stored state:', error);
+    }
   }
 }

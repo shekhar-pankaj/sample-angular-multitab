@@ -72,4 +72,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
       true
     );
   }
+
+  createOrder(): void {
+    this.tabManager.openTab(
+      'Create Order',
+      '/orders/create',
+      true
+    );
+  }
 }

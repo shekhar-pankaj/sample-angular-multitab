@@ -1,5 +1,10 @@
 <div class="content">
-  <h1>Customers</h1>
+  <div class="header-row">
+    <h1>Customers</h1>
+    <button class="btn btn-primary" (click)="createCustomer()">
+      + Create New Customer
+    </button>
+  </div>
 
   <div *ngIf="loading" class="loading">
     Loading customers...

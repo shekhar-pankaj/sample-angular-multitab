@@ -11,12 +11,23 @@ A comprehensive Angular application for managing Customers, Products, and Orders
 - **On-Demand Loading**: Tabs load content only when activated
 - **Memory Leak Prevention**: Automatic cleanup of component references
 - **Tab Limit**: Maximum 10 tabs with automatic closure of oldest inactive tabs
+- **Browser Tab Duplication**: Duplicate browser tab preserves all open tabs and their state (localStorage-based)
 
 ### Business Features
 - **Customer Management**: View customer list and detailed information
 - **Product Catalog**: Browse products with details and pricing
 - **Order System**: Track orders with customer and product relationships
 - **Cross-Navigation**: Seamlessly navigate between related entities in new tabs
+
+### 🆕 Form State Persistence
+- **Create Forms**: Add new customers and products with reactive forms
+- **Auto-Save**: Form data automatically saved while typing
+- **Tab-Safe**: Switch between tabs without losing form progress
+- **Per-Tab State**: Each form tab maintains independent state
+- **Smart Restore**: Return to forms and continue where you left off
+- **Full Validation**: Client-side validation with helpful error messages
+
+See [FORM-FEATURES.md](FORM-FEATURES.md) for complete documentation.
 
 ## 🏗️ Architecture
 

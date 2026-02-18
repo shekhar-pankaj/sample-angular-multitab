@@ -63,4 +63,10 @@ export class CustomerService {
     const customer = this.customers.find(c => c.id === id);
     return of(customer).pipe(delay(200));
   }
+
+  createCustomer(customer: Customer): Observable<Customer> {
+    // Simulate API call with delay
+    this.customers.push(customer);
+    return of(customer).pipe(delay(500));
+  }
 }

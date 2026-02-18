@@ -1,6 +1,15 @@
 <div class="content">
-  <h1>Orders</h1>
-  <p *ngIf="filterCustomerId">Showing orders for customer ID: {{ filterCustomerId }}</p>
+  <div class="header-row">
+    <div>
+      <h1>Orders</h1>
+      <p *ngIf="filterCustomerId" style="margin: 0; color: #666;">
+        Showing orders for customer ID: {{ filterCustomerId }}
+      </p>
+    </div>
+    <button class="btn btn-primary" (click)="createOrder()">
+      + Create New Order
+    </button>
+  </div>
 
   <div *ngIf="loading" class="loading">
     Loading orders...
