@@ -1,0 +1,83 @@
+<div class="content">
+  <div *ngIf="loading" class="loading">
+    Loading order details...
+  </div>
+
+  <div *ngIf="!loading && !order" class="empty-state">
+    <h2>Order not found</h2>
+    <p>The requested order could not be found.</p>
+  </div>
+
+  <div *ngIf="!loading && order">
+    <h1>Order #{{ order.id }}</h1>
+
+    <div class="detail-card">
+      <h3>Order Information</h3>
+      <div class="detail-row">
+        <span class="label">Order ID:</span>
+        <span class="value">{{ order.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Customer:</span>
+        <span class="value">
+          <a (click)="openCustomerDetail()" 
+             style="color: #007bff; cursor: pointer; text-decoration: underline;">
+            {{ order.customerName }}
+          </a>
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Order Date:</span>
+        <span class="value">{{ order.orderDate | date:'fullDate' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Status:</span>
+        <span class="value" [style.color]="
+          order.status === 'Delivered' ? 'green' :
+          order.status === 'Shipped' ? 'blue' :
+          order.status === 'Processing' ? 'orange' :
+          order.status === 'Cancelled' ? 'red' : 'gray'
+        ">
+          {{ order.status }}
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Shipping Address:</span>
+        <span class="value">{{ order.shippingAddress }}</span>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>Order Items</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of order.items">
+            <td>
+              <a (click)="openProductDetail(item.productId, item.productName)" 
+                 style="color: #007bff; cursor: pointer; text-decoration: underline;">
+                {{ item.productName }}
+              </a>
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.price | number:'1.2-2' }}</td>
+            <td>${{ (item.quantity * item.price) | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="font-weight: bold; background-color: #f8f9fa;">
+            <td colspan="3" style="text-align: right;">Total:</td>
+            <td>${{ order.totalAmount | number:'1.2-2' }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="tab-container">
+  <!-- Navigation Bar -->
+  <div class="nav-bar">
+    <a (click)="openCustomers()">Customers</a>
+    <a (click)="openProducts()">Products</a>
+    <a (click)="openOrders()">Orders</a>
+    <a *ngIf="tabs.length > 0" (click)="closeAllTabs()" style="margin-left: auto;">Close All</a>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar" *ngIf="tabs.length > 0">
+    <div 
+      *ngFor="let tab of tabs" 
+      class="tab" 
+      [class.active]="isActiveTab(tab.id)"
+      (click)="onTabClick(tab)"
+      [title]="tab.title + ' - ' + tab.url">
+      <span class="tab-title">{{ tab.title }}</span>
+      <span class="tab-close" (click)="onTabClose($event, tab)">&times;</span>
+    </div>
+  </div>
+
+  <!-- Tab Content Area -->
+  <div class="tab-content">
+    <!-- Show welcome message when no tabs are open -->
+    <div *ngIf="tabs.length === 0" class="empty-state">
+      <h2>Welcome to Multi-Tab Manager</h2>
+      <p>Select an option from the menu above to get started.</p>
+      <p>Click on Customers, Products, or Orders to open a new tab.</p>
+    </div>
+
+    <!-- Router Outlet for Tab Content -->
+    <router-outlet *ngIf="tabs.length > 0"></router-outlet>
+  </div>
+</div>

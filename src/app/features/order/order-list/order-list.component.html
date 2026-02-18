@@ -1,0 +1,50 @@
+<div class="content">
+  <h1>Orders</h1>
+  <p *ngIf="filterCustomerId">Showing orders for customer ID: {{ filterCustomerId }}</p>
+
+  <div *ngIf="loading" class="loading">
+    Loading orders...
+  </div>
+
+  <div *ngIf="!loading && orders.length === 0" class="empty-state">
+    <h2>No orders found</h2>
+    <p>There are no orders in the system.</p>
+  </div>
+
+  <table *ngIf="!loading && orders.length > 0">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Order Date</th>
+        <th>Status</th>
+        <th>Items</th>
+        <th>Total Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders" (click)="openOrderDetail(order)">
+        <td>{{ order.id }}</td>
+        <td>
+          <a (click)="$event.stopPropagation(); openCustomerDetail(order)" 
+             style="color: #007bff; cursor: pointer; text-decoration: underline;">
+            {{ order.customerName }}
+          </a>
+        </td>
+        <td>{{ order.orderDate | date:'short' }}</td>
+        <td>
+          <span [style.color]="
+            order.status === 'Delivered' ? 'green' :
+            order.status === 'Shipped' ? 'blue' :
+            order.status === 'Processing' ? 'orange' :
+            order.status === 'Cancelled' ? 'red' : 'gray'
+          ">
+            {{ order.status }}
+          </span>
+        </td>
+        <td>{{ order.items.length }} item(s)</td>
+        <td>${{ order.totalAmount | number:'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

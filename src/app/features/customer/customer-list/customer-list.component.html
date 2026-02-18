@@ -1,0 +1,35 @@
+<div class="content">
+  <h1>Customers</h1>
+
+  <div *ngIf="loading" class="loading">
+    Loading customers...
+  </div>
+
+  <div *ngIf="!loading && customers.length === 0" class="empty-state">
+    <h2>No customers found</h2>
+    <p>There are no customers in the system yet.</p>
+  </div>
+
+  <table *ngIf="!loading && customers.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Total Orders</th>
+        <th>Joined Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers" (click)="openCustomerDetail(customer)">
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.phone }}</td>
+        <td>{{ customer.totalOrders }}</td>
+        <td>{{ customer.createdAt | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,49 @@
+<div class="content">
+  <div *ngIf="loading" class="loading">
+    Loading customer details...
+  </div>
+
+  <div *ngIf="!loading && !customer" class="empty-state">
+    <h2>Customer not found</h2>
+    <p>The requested customer could not be found.</p>
+  </div>
+
+  <div *ngIf="!loading && customer">
+    <h1>Customer Details</h1>
+
+    <div class="detail-card">
+      <div class="detail-row">
+        <span class="label">Customer ID:</span>
+        <span class="value">{{ customer.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Name:</span>
+        <span class="value">{{ customer.name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ customer.email }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Phone:</span>
+        <span class="value">{{ customer.phone }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Address:</span>
+        <span class="value">{{ customer.address }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Member Since:</span>
+        <span class="value">{{ customer.createdAt | date:'fullDate' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Total Orders:</span>
+        <span class="value">{{ customer.totalOrders }}</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" (click)="viewOrders()">
+      View Customer Orders
+    </button>
+  </div>
+</div>

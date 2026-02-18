@@ -1,0 +1,45 @@
+<div class="content">
+  <div *ngIf="loading" class="loading">
+    Loading product details...
+  </div>
+
+  <div *ngIf="!loading && !product" class="empty-state">
+    <h2>Product not found</h2>
+    <p>The requested product could not be found.</p>
+  </div>
+
+  <div *ngIf="!loading && product">
+    <h1>Product Details</h1>
+
+    <div class="detail-card">
+      <div class="detail-row">
+        <span class="label">Product ID:</span>
+        <span class="value">{{ product.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Name:</span>
+        <span class="value">{{ product.name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Description:</span>
+        <span class="value">{{ product.description }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Category:</span>
+        <span class="value">{{ product.category }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Price:</span>
+        <span class="value">${{ product.price | number:'1.2-2' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Stock:</span>
+        <span class="value">{{ product.stock }} units</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Created:</span>
+        <span class="value">{{ product.createdAt | date:'fullDate' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
